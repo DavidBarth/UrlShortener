@@ -1,3 +1,4 @@
+
 # UrlShortener
 
 ## Run the solution
@@ -17,3 +18,4 @@ The application should start in localhost:PORT URL.
 ### URL redirect
 `http://localhost:xxxx/uniqueID`
 
+![Capture](https://user-images.githubusercontent.com/7429247/131897066-4a47e373-ec78-4fdc-9178-1a8cbfac9f8b.PNG)
