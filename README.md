@@ -7,7 +7,7 @@ Navigate to the project folder e.g.: `\UrlShortener-master` and run from the com
 "dotnet ef database update --project UrlShortener.Infrastructure --startup-project UrlShortener.API"
 
 ### To run the application:
-"dotnet run"
+"dotnet run --project UrlShortener.API"
 
 The application should start in localhost:PORT URL.
 
