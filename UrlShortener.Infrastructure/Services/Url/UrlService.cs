@@ -52,7 +52,7 @@ namespace UrlShortener.Infrastructure.Services.Url
                     }
                     else
                     {
-                        throw ex;
+                        throw ;
                     }
                     totalAttempts++;
                 }
@@ -76,9 +76,9 @@ namespace UrlShortener.Infrastructure.Services.Url
         public async Task<int> DeleteExpiredUrls()
         {
             List<Models.Url> listUrls = new List<Models.Url>();
+            int totalDeleted = 0;
             try
             {
-                int totalDeleted = 0;
                 listUrls = await context.Urls.Where(u => u.Expiration < DateTime.Now).ToListAsync();
                 if (listUrls.Count > 0)
                 {
@@ -88,9 +88,9 @@ namespace UrlShortener.Infrastructure.Services.Url
 
                 return totalDeleted;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw;
+                return totalDeleted;
             }
         }
 
