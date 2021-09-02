@@ -48,5 +48,6 @@ The application should start in localhost:PORT URL.
 - Create a SPA with Angular;
 - Create unit testing for all the services with Moq;
 - Increase the model validation;
+- Add authentication to the "clean expired URL" controller
 - Move to a NoSQL database;
 - Add docker;
