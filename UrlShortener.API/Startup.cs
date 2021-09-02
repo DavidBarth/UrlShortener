@@ -1,8 +1,10 @@
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,8 +32,7 @@ namespace UrlShortener.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(x=> x.RegisterValidatorsFromAssemblyContaining<Startup>());
             #region .   AutoMapper   .
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -40,8 +41,9 @@ namespace UrlShortener.API
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
             #endregion
-            services.AddDbContext<UrlShortenerDBContext>();
+            services.AddDbContext<UrlShortenerDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUrlService, UrlService>();
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "UrlShortener.API", Version = "v1" });

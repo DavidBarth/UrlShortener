@@ -23,9 +23,11 @@ namespace UrlShortener.API.Controllers
         }
 
         [HttpGet("{shortUrl}")]
-        public async Task<IActionResult> Redirect(string shortUrl)
+        public async Task<IActionResult> RedirectUrl(string shortUrl)
         {
             Models.Url url = await urlService.GetLongUrl(shortUrl);
+            if (url is null)
+                return NotFound("Invalid URL");
             return this.RedirectPermanent(url.LongUrl.ToString());
         }
     }

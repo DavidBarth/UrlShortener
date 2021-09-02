@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,13 @@ namespace UrlShortener.API.Controllers
     {
         private readonly IUrlService urlService;
         private readonly IMapper mapper;
+        private readonly int maxLengthUrl;
 
-        public UrlShortenerController(IUrlService urlService, IMapper mapper)
+        public UrlShortenerController(IUrlService urlService, IMapper mapper, IConfiguration configuration)
         {
             this.urlService = urlService;
             this.mapper = mapper;
+            maxLengthUrl = Convert.ToInt16(configuration.GetSection("AppSettings:UrlSize").Value);
         }
 
         /// <summary>
@@ -33,10 +36,32 @@ namespace UrlShortener.API.Controllers
         [HttpPost("PostUrl")]
         public async Task<ActionResult<UrlResponseDTO>> PostUrl(UrlRequestDTO urlRequest)
         {
-            Models.Url url = new Models.Url();
-            url = await urlService.SaveUrl(mapper.Map<Models.Url>(urlRequest));
-            url.ShortUrl = FormatUrl.FormatShortUrl(this.Request.Scheme, this.Request.Host.Value, this.Request.PathBase, url.ShortUrl);
-            return mapper.Map<UrlResponseDTO>(url);
+            Models.Url url = mapper.Map<Models.Url>(urlRequest);
+            //generate random ID
+            url.ShortUrl = UrlGenerator.GenerateUniqueValue(maxLengthUrl);
+
+            //save to DB
+            url = await urlService.SaveUrl(url);
+            
+            //update model with scheme/host/url
+            url.ShortUrl = FormatUrl.FormatShortUrl(this.Request.Scheme, this.Request.Host.Value, url.ShortUrl);
+            
+            //convert to a DTO and return
+            UrlResponseDTO urlResponse = mapper.Map<UrlResponseDTO>(url);
+            return urlResponse;
+        }
+
+        /// <summary>
+        /// Clean expired URL's
+        /// </summary>
+        /// <returns>int</returns>
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("CleanExpiredUrls")]
+        public async Task<ActionResult<int>> CleanExpiredUrls()
+        {
+            int totalUrlsDeleted = await urlService.DeleteExpiredUrls();
+            return Ok("Total URL's deleted: " + totalUrlsDeleted);
         }
     }
 }

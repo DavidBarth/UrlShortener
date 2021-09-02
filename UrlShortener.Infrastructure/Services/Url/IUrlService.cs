@@ -10,5 +10,7 @@ namespace UrlShortener.Infrastructure.Services.Url
     {
         Task<Models.Url> SaveUrl(Models.Url url);
         Task<Models.Url> GetLongUrl(string shortUrl);
+        Task<Models.Url> GetExistingLongUrl(Models.Url url);
+        Task<int> DeleteExpiredUrls();
     }
 }

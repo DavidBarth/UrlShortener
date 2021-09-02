@@ -7,7 +7,7 @@ namespace UrlShortener.Models
     {
 
         [Key]
-        public string ShortUrl { get; set; } = UrlShortener.Shared.Utils.UrlGenerator.GenerateUniqueValue(6);
+        public string ShortUrl { get; set; }
         [Required]
         public Uri LongUrl { get; set; }
         [Required]

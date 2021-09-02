@@ -10,7 +10,6 @@ namespace UrlShortener.Shared.Utils
     {
         public static string GenerateUniqueValue(int size)
         {
-            //values can be set in the app.config
             if (size < 11 && size > 3)
             {
                 Guid guid = Guid.NewGuid();
