@@ -5,8 +5,8 @@
 # This repo is a fork of the original by Rafael to play around.
 ## To manually test follow Run the solution steps below, then come back to below line.
 
-To run the UI install Angular and navigate to '\URLShortener\UrlShortener.UI'
-Start the Angular app with ng serve --ssl command
+- To run the UI install Angular and navigate to '\URLShortener\UrlShortener.UI'
+- Start the Angular app with ng serve --ssl command
 
 <img width="504" alt="image" src="https://user-images.githubusercontent.com/7574974/193919439-3383ef0b-c9fb-4c31-900f-4711bc8d4f71.png">
 
