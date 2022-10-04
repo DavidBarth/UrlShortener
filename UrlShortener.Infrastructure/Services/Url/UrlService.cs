@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UrlShortener.Infrastructure.Database;
 
@@ -94,5 +93,9 @@ namespace UrlShortener.Infrastructure.Services.Url
             }
         }
 
+        public async Task<List<Models.Url>> GetExistingStoredUrls()
+        {
+            return await context.Urls.ToListAsync();
+        }
     }
 }
