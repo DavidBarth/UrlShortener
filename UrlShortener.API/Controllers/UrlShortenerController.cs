@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UrlShortener.Infrastructure.Services.Url;
 using UrlShortener.Shared.DTO.API;
@@ -25,6 +24,25 @@ namespace UrlShortener.API.Controllers
             this.urlService = urlService;
             this.mapper = mapper;
             maxLengthUrl = Convert.ToInt16(configuration.GetSection("AppSettings:UrlSize").Value);
+        }
+
+        /// <summary>
+        /// Returns list of stored Urls that were shortened by the service
+        /// </summary>
+        /// <returns>List of UrlResponseDTO</returns>
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("GetShortenedUrls")]
+        public async Task<ActionResult<List<UrlResponseDTO>>> GetShortenedUrls()
+        {
+            var existingUrls = await urlService.GetExistingStoredUrls();
+            List<UrlResponseDTO> existingUrlsResponse = new List<UrlResponseDTO>();
+            foreach (var url in existingUrls)
+            {
+                url.ShortUrl = FormatUrl.FormatShortUrl(this.Request.Scheme, this.Request.Host.Value, url.ShortUrl);
+                existingUrlsResponse.Add(mapper.Map<UrlResponseDTO>(url));
+            }
+            return existingUrlsResponse;
         }
 
         /// <summary>
