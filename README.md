@@ -1,4 +1,4 @@
-# This repo is a fork of the original to play around.
+# This repo is a fork of the original by Rafael to play around.
 To manually test follow Run the solution steps below, then come back to below line.
 To run the UI install Angular and navigate to '\URLShortener\UrlShortener.UI'
 Start the Angular app with ng serve --ssl command
